@@ -10,14 +10,12 @@ import Modal from "@/components/Modal/Modal";
 import { useDebouncedCallback } from "use-debounce";
 import toast, { Toaster } from "react-hot-toast";
 import NoteForm from "@/components/NoteForm/NoteForm";
-import { useParams } from "next/navigation";
 
-export default function NotesClient() {
+export default function NotesClient({ tag }: { tag: string }) {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { slug } = useParams<{ slug: string[] }>();
-  const category = slug[0] === "all" ? undefined : slug[0];
+  const category = tag === "all" ? undefined : tag;
 
   const { data, isLoading, isSuccess } = useQuery({
     queryKey: ["notes", page, query, category],
