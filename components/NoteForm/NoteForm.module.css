@@ -10,7 +10,6 @@
   font-size: 14px;
   font-weight: 500;
   color: #212529;
-  position: relative;
 }
 
 .input,
@@ -69,7 +68,4 @@
   color: #dc3545;
   font-size: 12px;
   margin-top: 4px;
-  position: absolute;
-  top: 0px;
-  right: 0px;
 }

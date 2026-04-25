@@ -10,15 +10,18 @@ import Modal from "@/components/Modal/Modal";
 import { useDebouncedCallback } from "use-debounce";
 import toast, { Toaster } from "react-hot-toast";
 import NoteForm from "@/components/NoteForm/NoteForm";
+import { useParams } from "next/navigation";
 
 export default function NotesClient() {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { slug } = useParams<{ slug: string[] }>();
+  const category = slug[0] === "all" ? undefined : slug[0];
 
   const { data, isLoading, isSuccess } = useQuery({
-    queryKey: ["notes", page, query],
-    queryFn: () => fetchNotes({ query, page, perPage: 8 }),
+    queryKey: ["notes", page, query, category],
+    queryFn: () => fetchNotes({ query, page, perPage: 8, tag: category }),
     refetchOnMount: false,
     placeholderData: keepPreviousData,
   });
@@ -53,7 +56,7 @@ export default function NotesClient() {
         <Toaster position="top-center" reverseOrder={false} />
       </div>
       <div className={css.app}>
-        <header className={css.toolbar}>
+        <div className={css.toolbar}>
           <SearchBox findTasks={findTasks} />
           {totalPages > 1 && (
             <Pagination
@@ -65,7 +68,7 @@ export default function NotesClient() {
           <button onClick={openModal} className={css.button}>
             Create note +
           </button>
-        </header>
+        </div>
         {!isLoading && isSuccess && data.notes.length > 0 && (
           <NoteList notes={data.notes} />
         )}
